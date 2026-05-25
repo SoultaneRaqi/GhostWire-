@@ -1,31 +1,27 @@
 ﻿using GhostWire.Core.Crypto;
+using GhostWire.Core.Networking;
 
-Console.WriteLine("--- GhostWire E2E Test ---");
+// 1. Setup Node Identity
+var identity = new IdentityService();
+int randomTcpPort = new Random().Next(7000, 8000); 
 
-// 1. Generate two unique identities
-var nodeA = new IdentityService();
-var nodeB = new IdentityService();
+Console.Write("Enter your alias: ");
+var alias = Console.ReadLine() ?? "Unknown";
 
-Console.WriteLine($"Node A Fingerprint: {nodeA.GetFingerprint()}");
-Console.WriteLine($"Node B Fingerprint: {nodeB.GetFingerprint()}\n");
+Console.Clear();
+Console.WriteLine("=== GhostWire Node ===");
+Console.WriteLine($"Alias:       {alias}");
+Console.WriteLine($"Fingerprint: {identity.GetFingerprint()}");
+Console.WriteLine($"TCP Port:    {randomTcpPort}");
+Console.WriteLine("======================\n");
 
-// 2. Node A encrypts a message intended for Node B
-string originalMessage = "Top secret mesh network data!";
-Console.WriteLine($"[Node A] Original: {originalMessage}");
+// 2. Start Discovery Service
+var discovery = new DiscoveryService(identity, alias, randomTcpPort);
 
-byte[] encryptedPayload = EncryptionService.Encrypt(
-    originalMessage, 
-    nodeB.PublicKey,   // Node A needs Node B's public key to lock it
-    nodeA.PrivateKey   // Node A uses its own private key to sign it
-);
+// Run listening and broadcasting in the background
+_ = discovery.StartListeningAsync();
+_ = discovery.StartBroadcastingAsync();
 
-Console.WriteLine($"[Network] Payload moving through network: {Convert.ToBase64String(encryptedPayload)[..40]}... (Unreadable)");
-
-// 3. Node B receives the payload and decrypts it
-string decryptedMessage = EncryptionService.Decrypt(
-    encryptedPayload,
-    nodeA.PublicKey,   // Node B needs Node A's public key to verify who sent it
-    nodeB.PrivateKey   // Node B uses its own private key to unlock it
-);
-
-Console.WriteLine($"[Node B] Decrypted: {decryptedMessage}");
+// Keep the app running
+Console.WriteLine("Waiting for peers... (Press Ctrl+C to exit)");
+await Task.Delay(-1);

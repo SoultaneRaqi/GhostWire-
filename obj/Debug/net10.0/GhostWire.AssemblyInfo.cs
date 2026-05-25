@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GhostWire")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0f56e8a03d3a2e0ac2f090fc5ab433522c0e42a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc5e1fc28252d607630af58ee4b0d31f21736d38")]
 [assembly: System.Reflection.AssemblyProductAttribute("GhostWire")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GhostWire")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
