@@ -1,18 +1,31 @@
-﻿using GhostWire.Core.Networking;
+﻿using GhostWire.Core.Crypto;
 
-var server = new TcpServer(7777);
+Console.WriteLine("--- GhostWire E2E Test ---");
 
-_ = server.StartAsync();
+// 1. Generate two unique identities
+var nodeA = new IdentityService();
+var nodeB = new IdentityService();
 
-Console.WriteLine("Press ENTER to send test message");
-Console.ReadLine();
+Console.WriteLine($"Node A Fingerprint: {nodeA.GetFingerprint()}");
+Console.WriteLine($"Node B Fingerprint: {nodeB.GetFingerprint()}\n");
 
-var client = new TcpClientService();
+// 2. Node A encrypts a message intended for Node B
+string originalMessage = "Top secret mesh network data!";
+Console.WriteLine($"[Node A] Original: {originalMessage}");
 
-await client.SendAsync(
-    "127.0.0.1",
-    7777,
-    "hello from ghostwire"
+byte[] encryptedPayload = EncryptionService.Encrypt(
+    originalMessage, 
+    nodeB.PublicKey,   // Node A needs Node B's public key to lock it
+    nodeA.PrivateKey   // Node A uses its own private key to sign it
 );
 
-Console.ReadLine();
+Console.WriteLine($"[Network] Payload moving through network: {Convert.ToBase64String(encryptedPayload)[..40]}... (Unreadable)");
+
+// 3. Node B receives the payload and decrypts it
+string decryptedMessage = EncryptionService.Decrypt(
+    encryptedPayload,
+    nodeA.PublicKey,   // Node B needs Node A's public key to verify who sent it
+    nodeB.PrivateKey   // Node B uses its own private key to unlock it
+);
+
+Console.WriteLine($"[Node B] Decrypted: {decryptedMessage}");
