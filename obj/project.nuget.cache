@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "1qQwjbugn5g=",
+  "dgSpecHash": "Av6sdy9N3Gw=",
   "success": true,
   "projectFilePath": "/home/soultane/dev-projects/GhostWire/GhostWire.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/soultane/.nuget/packages/libsodium/1.0.22/libsodium.1.0.22.nupkg.sha512",
+    "/home/soultane/.nuget/packages/sodium.core/1.4.1/sodium.core.1.4.1.nupkg.sha512",
+    "/home/soultane/.nuget/packages/spectre.console/0.55.2/spectre.console.0.55.2.nupkg.sha512",
+    "/home/soultane/.nuget/packages/spectre.console.ansi/0.55.2/spectre.console.ansi.0.55.2.nupkg.sha512"
+  ],
   "logs": []
 }
